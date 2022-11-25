@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 import requests
+import re
 from bs4 import BeautifulSoup
 from datetime import datetime
-import re
+from dateutil import tz
+
+
+class TimeNotRetrievedYetError(Exception):
+    def __init__(self):
+        self.msg = "Time not retrieved yet. Use Game().getData(self, key) before using this"
+        super().__init__(self.msg)
 
 
 class Game:
     def __init__(self, html_block):
+        self.britishTime = None
         self.html_block = html_block
         self.TEAM = "swap-text__target"
         self.SCORE = "matches__teamscores-side"
@@ -38,7 +46,18 @@ class Game:
         for c, i in enumerate(returnFormat):
             returnFormat[c] = i.strip()
 
+        if key == self.TIME:
+            self.britishTime = returnFormat
+
         return returnFormat
+
+    def convertScore(self, day):
+        if self.britishTime is None:
+            raise TimeNotRetrievedYetError
+
+        utc = datetime.strptime(f"2022-11-25 {self.britishTime[0]}", "%Y-%m-%d %H:%M")
+        utc = utc.replace(tzinfo=fromZone)
+        return utc.astimezone(toZone)
 
 
 url = "https://www.skysports.com/world-cup-fixtures"
@@ -46,8 +65,11 @@ html = requests.get(url)
 soup = BeautifulSoup(html.text, 'html.parser')
 dayRegex = re.compile(r"(\w+ \d+)\w+ (\w+)")
 
+fromZone = tz.gettz("Europe/London")
+toZone = tz.tzlocal()
 
-def getMatchesInDay(day, writeTo, f):
+
+def getGamesInDay(day, writeTo, f):
     game_list = []
     gameCountInDay = 0
 
@@ -74,11 +96,14 @@ def getMatchesInDay(day, writeTo, f):
 
         teams = match.getData(match.TEAM)
         score = match.getData(match.SCORE)
-        time = match.getData(match.TIME)
+        match.getData(match.TIME)
+
+        timeLocal = match.convertScore(day.text).strftime('%H:%M:%p')
 
         teamFormat = teams[0] + " vs " + teams[1]
         scoreFormat = f" [{score[0]} - {score[1]}]"
-        timeFormat = f" Played at {time[0]} (Qatar Time)"
+        timeFormat = f" Played at {timeLocal} (Local Time)"
+
         if writeTo == "file":
             f.write(teamFormat + scoreFormat + timeFormat + "\n")
         elif writeTo == "console":
@@ -90,11 +115,11 @@ def writeToFile():
         s = soup.find_all("h4", "fixres__header2")
         print(len(s))
         for day in s:
-            getMatchesInDay(day, "file", f)
+            getGamesInDay(day, "file", f)
             f.write("\n")
 
 
-def currentGame():
+def currentDay():
     dayNoSuffix = ""
     matchFound = False
     s = soup.find_all("h4", "fixres__header2")
@@ -104,8 +129,8 @@ def currentGame():
             dayNoSuffix = mo.group(1) + " " + mo.group(2)
         if dayNoSuffix == dateToText():
             print(day.text)
-            print("-"*20 + "\n")
-            getMatchesInDay(day, "console", None)
+            print("-" * 20 + "\n")
+            getGamesInDay(day, "console", None)
             matchFound = True
 
     if not matchFound:
@@ -121,5 +146,4 @@ def dateToText():
     return f"{dayWeek} {day} {month}"
 
 
-currentGame()
-
+currentDay()
