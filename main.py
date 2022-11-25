@@ -115,6 +115,7 @@ def writeToFile():
         s = soup.find_all("h4", "fixres__header2")
         print(len(s))
         for day in s:
+            f.write(day.text + "\n")
             getGamesInDay(day, "file", f)
             f.write("\n")
 
