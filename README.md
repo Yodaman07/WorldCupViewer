@@ -9,7 +9,7 @@ If you want to turn this into an executable or app use the following steps.
 ## On mac
 - On macos, download the main python file, and make sure you are running the `currentDay()` function.
 - Open a terminal window and locate the folder with the script in it.
-- Make sure you have pyinstaller, requests, and bs4 installed. If not run `pip install` and type `pyinstaller`, `requests`, or `bs4`.
+- Make sure you have pyinstaller, requests, and bs4 installed. If not run `pip install -r requirements.txt`
 - Then run pyinstaller FILENAME.py.
 - In the dist folder, there should be an executable called FILENAME.
 - Click that to run the code.
