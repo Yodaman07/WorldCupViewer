@@ -7,7 +7,7 @@ Run the script normally to get the games.
 
 If you want to turn this into an executable or app use the following steps.
 ## On mac
-- On macos, download the main python file, and make sure you are running the `currentGame()` function.
+- On macos, download the main python file, and make sure you are running the `currentDay()` function.
 - Open a terminal window and locate the folder with the script in it.
 - Make sure you have pyinstaller, requests, and bs4 installed. If not run `pip install` and type `pyinstaller`, `requests`, or `bs4`.
 - Then run pyinstaller FILENAME.py.
