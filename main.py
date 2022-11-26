@@ -51,7 +51,7 @@ class Game:
 
         return returnFormat
 
-    def convertScore(self, day):
+    def convertScore(self):
         if self.britishTime is None:
             raise TimeNotRetrievedYetError
 
@@ -75,10 +75,10 @@ def getGamesInDay(day, writeTo, f):
 
     # Gets games played in that day
     for sibling in day.findNextSiblings():
-        if sibling.__str__()[:3] == "<h4":
+        if str(sibling)[:3] == "<h4":
             # print(sibling.__str__()[:3] + ":" + str(gameCountInDay))
             break
-        elif sibling.__str__()[:4] == "<div":
+        elif str(sibling)[:4] == "<div":
             # Every time there is a game
             # print(sibling.__str__()[:4])
             gameCountInDay += 1
@@ -98,7 +98,7 @@ def getGamesInDay(day, writeTo, f):
         score = match.getData(match.SCORE)
         match.getData(match.TIME)
 
-        timeLocal = match.convertScore(day.text).strftime('%H:%M:%p')
+        timeLocal = match.convertScore().strftime('%H:%M:%p')
 
         teamFormat = teams[0] + " vs " + teams[1]
         scoreFormat = f" [{score[0]} - {score[1]}]"
