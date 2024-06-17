@@ -62,7 +62,7 @@ running = True
 pygame.init()
 
 display.set_mode((500, 500))
-display.set_caption("World Cup 2022")
+display.set_caption("Euros 2024")
 display.get_surface().fill(bg)
 
 surface = display.get_surface()
@@ -79,7 +79,7 @@ rc = getCenter(300, 50)
 rect = pygame.Rect(rc[0], 10, 300, 50)
 pygame.draw.rect(surface, (255, 0, 0), rect)
 
-img = TITLE_FONT.render("World Cup 2022 Games", True, (0, 0, 0), (255, 0, 0))
+img = TITLE_FONT.render("Euros 2024 Games", True, (0, 0, 0), (255, 0, 0))
 surface.blit(img, img.get_rect(center=(centerX, rect.centery)))
 
 returnList = main.currentDay("pygame")

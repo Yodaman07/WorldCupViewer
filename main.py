@@ -95,7 +95,7 @@ class Game:
             return None
 
 
-url = "https://www.skysports.com/world-cup-fixtures"
+url = "https://www.skysports.com/euro-2024-fixtures"
 html = requests.get(url)
 soup = BeautifulSoup(html.text, 'html.parser')
 dayRegex = re.compile(r"(\w+ \d+)\w+ (\w+)")
