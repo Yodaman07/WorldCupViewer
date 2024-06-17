@@ -1,7 +1,17 @@
 import pygame
 import main
+import sys, os
 from pygame import display
 
+def resource_path(relative_path): # NOT MY CODE <-- Function copied from https://stackoverflow.com/questions/7674790/bundling-data-files-with-pyinstaller-onefile/13790741#13790741
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 # Use on rectangles
 def getCenter(rw, rh):
@@ -68,12 +78,12 @@ display.get_surface().fill(bg)
 surface = display.get_surface()
 centerX = display.get_window_size()[0] / 2
 
-TITLE_FONT = pygame.font.Font("./Roboto-Bold.ttf", 25)
-HEADING_FONT = pygame.font.Font("./Roboto-Regular.ttf", 22)
+TITLE_FONT = pygame.font.Font(resource_path("Roboto-Bold.ttf"), 25)
+HEADING_FONT = pygame.font.Font(resource_path("Roboto-Regular.ttf"), 22)
 
-GAME_FONT = pygame.font.Font("./Roboto-Regular.ttf", 18)
-GAME_FONT_BOLD = pygame.font.Font("./Roboto-Bold.ttf", 18)
-TIME_FONT = pygame.font.Font("./Roboto-Regular.ttf", 15)
+GAME_FONT = pygame.font.Font(resource_path("Roboto-Regular.ttf"), 18)
+GAME_FONT_BOLD = pygame.font.Font(resource_path("Roboto-Bold.ttf"), 18)
+TIME_FONT = pygame.font.Font(resource_path("Roboto-Regular.ttf"), 15)
 
 rc = getCenter(300, 50)
 rect = pygame.Rect(rc[0], 10, 300, 50)
